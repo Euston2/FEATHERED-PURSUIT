@@ -7,7 +7,7 @@ namespace Plane.Gameplay
     {
         public static ScoreManager instance;
 
-        // Changed 'Text' to 'TextMeshProUGUI'
+        
         public TextMeshProUGUI scoreText;
         private int currentScore = 0;
 

@@ -5,57 +5,75 @@ namespace Plane.Gameplay
     public class EnemyBird : MonoBehaviour
     {
         [Header("Chase Settings")]
-        public float followSpeed = 1.5f;      // How fast it matches the player's movements
-        public float restingZPosition = -30f; // Sits behind the plane (Player is at Z=0)
+        public float chaseSpeed = 10f;         // Real max speed (units/sec) — bird can be outrun if you're faster
+        public float restingZPosition = -30f;
+        public float hoverOffsetY = 3f;        // Bird hovers above you, not exactly on your Y
+        public float hoverOffsetX = 2f;        // Bird hovers to a side, not exactly on your X
 
         [Header("Attack Settings")]
-        public float attackCooldown = 5f;   // Seconds between attacks
-        public float attackSpeed = 1f;     // How fast it lunges forward
+        public float attackCooldown = 8f;
+        public float dashSpeed = 25f;
+        public float homingStrength = 4f;
+
+        [Header("Wind-Up (Telegraph)")]
+        public float windUpDuration = 0.6f;
 
         private float timer = 0f;
         private bool isAttacking = false;
+        private bool isWindingUp = false;
+        private float windUpTimer = 0f;
 
         void Start()
         {
-            // Start the bird in its correct position behind the player
             transform.position = new Vector3(0, 10, restingZPosition);
         }
 
         void Update()
         {
-            // Don't do anything if the player is dead
             if (PlayerPlane.m_Main == null || !PlayerPlane.m_Main.gameObject.activeInHierarchy) return;
 
-            if (!isAttacking)
+            Vector3 playerPos = PlayerPlane.m_Main.transform.position;
+
+            if (isWindingUp)
             {
-                // 1. STALK THE PLAYER
-                // Calculate the target position: Match the player's X and Y, but stay back at restingZ
-                Vector3 targetPos = new Vector3(
-                    PlayerPlane.m_Main.transform.position.x,
-                    PlayerPlane.m_Main.transform.position.y + 1.5f, // Hover slightly above them
-                    restingZPosition
-                );
+                // --- WIND-UP PHASE ---
+                windUpTimer += Time.deltaTime;
 
-                // Smoothly glide towards that target
-                transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
+                if (windUpTimer >= windUpDuration)
+                {
+                    isWindingUp = false;
+                    isAttacking = true;
+                }
+            }
+            else if (!isAttacking)
+            {
+                // --- STALKING PHASE ---
+                // Target a point near you, not your exact X/Y, so the bird never overlaps your position
+                Vector3 targetPos = new Vector3(playerPos.x + hoverOffsetX, playerPos.y + hoverOffsetY, restingZPosition);
 
-                // 2. COUNTDOWN TO ATTACK
+                // Real max speed — if you move faster than chaseSpeed, a visible gap opens up.
+                // This is the key fix: MoveTowards caps the speed, unlike Lerp which always closes distance proportionally.
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, chaseSpeed * Time.deltaTime);
+
                 timer += Time.deltaTime;
                 if (timer >= attackCooldown)
                 {
-                    isAttacking = true;
+                    isWindingUp = true;
+                    windUpTimer = 0f;
                     timer = 0f;
                 }
             }
             else
             {
-                // 3. THE ATTACK!
-                // Dash forward slowly, and limit the speed
-                float moveStep = 8f * Time.deltaTime;
-                transform.position += Vector3.forward * moveStep;
+                // --- ATTACK DASH ---
+                float newZ = transform.position.z + (dashSpeed * Time.deltaTime);
+                float newX = Mathf.Lerp(transform.position.x, playerPos.x, homingStrength * Time.deltaTime);
+                float newY = Mathf.Lerp(transform.position.y, playerPos.y, homingStrength * Time.deltaTime);
 
-                // Force the reset even if it's struggling to reach Z=5
-                if (transform.position.z > 2f) // Changed from 5f to 2f to reset sooner
+                transform.position = new Vector3(newX, newY, newZ);
+
+                // --- RELOAD ---
+                if (transform.position.z > 2f)
                 {
                     isAttacking = false;
                     Vector3 resetPos = transform.position;

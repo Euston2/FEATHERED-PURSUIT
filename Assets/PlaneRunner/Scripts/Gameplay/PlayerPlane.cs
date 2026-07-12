@@ -11,10 +11,7 @@ namespace Plane.Gameplay
         public Transform m_Base;
         Vector2 m_TurnSpeed = Vector2.zero;
 
-
         public GameObject m_ExplodeParticle;
-
-
 
         public static PlayerPlane m_Main;
 
@@ -22,13 +19,12 @@ namespace Plane.Gameplay
         {
             m_Main = this;
         }
-        // Start is called before the first frame update
+
         void Start()
         {
 
         }
 
-        // Update is called once per frame
         void Update()
         {
             float InputX = 0, InputY = 0;
@@ -52,22 +48,11 @@ namespace Plane.Gameplay
 
             Vector3 movement = 40 * Time.deltaTime * new Vector3(InputX, InputY, 0);
 
-            //m_TurnSpeed.x -= 2000 * Time.deltaTime * InputX;
-            //m_TurnSpeed.y = 500 * Time.deltaTime * InputY;
-            //m_TurnSpeed -= 8*Time.deltaTime * m_TurnSpeed;
-
-            //m_Angle += 10*Time.deltaTime * m_TurnSpeed;
-            //m_Angle.x -= 3*Time.deltaTime * m_Angle.x;
-            //m_Angle.x= Mathf.Clamp(m_Angle.x, -85, 85);
-            //m_Angle.y = Mathf.Clamp(m_Angle.y, -45, 45);
-
             m_Angle.x = Mathf.Lerp(m_Angle.x, 60.0f * InputX, 5 * Time.deltaTime);
             m_Angle.y = Mathf.Lerp(m_Angle.y, 20.0f * InputY, 5 * Time.deltaTime);
 
             m_Base.localRotation = Quaternion.Euler(-1f * m_Angle.y, 0, -m_Angle.x);
 
-            //transform.rotation = Quaternion.Euler(0, -0.8f*Time.deltaTime * m_Angle.x, 0) * transform.rotation;
-            //transform.position += 25*Time.deltaTime * (transform.forward+new Vector3(0, .005f*m_TurnSpeed.y, 0));
             transform.position += movement;
 
             Vector3 pos = transform.position;
@@ -76,15 +61,19 @@ namespace Plane.Gameplay
             pos.z = 0;
             transform.position = pos;
 
-            //GetComponent<AudioSource>().pitch = 1 + 0.004f*Mathf.Abs(m_Angle.x);
-
+            // --- THE FIX IS HERE ---
             Collider[] hits = Physics.OverlapSphere(transform.position, 2.5f);
             foreach (Collider hit in hits)
             {
+                // Ignore our own body
                 if (hit.gameObject == gameObject)
                     continue;
 
+                // Ignore ANYTHING that is not explicitly tagged "Enemy"
+                if (!hit.gameObject.CompareTag("Enemy"))
+                    continue;
 
+                // If we get past the checks above, it means we hit an Enemy. Trigger Game Over!
                 if (m_ExplodeParticle != null)
                 {
                     GameObject obj = Instantiate(m_ExplodeParticle);
@@ -94,13 +83,7 @@ namespace Plane.Gameplay
                 GameControl.m_Current.HandleGameOver();
                 gameObject.SetActive(false);
                 break;
-
             }
-
-
         }
-
-
     }
 }
-

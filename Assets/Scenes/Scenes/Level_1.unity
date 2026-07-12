@@ -1557,6 +1557,43 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &995888323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995888319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a0780fc2bea6046a24e8c07653a87d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Plane.Gameplay.EnemyBird
+  followSpeed: 1.5
+  restingZPosition: -30
+  attackCooldown: 5
+  dashSpeed: 40
+--- !u!65 &995888326
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995888319}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.993132, y: 1.7602973, z: 4.990256}
+  m_Center: {x: -0.6362581, y: 0.38014865, z: -0.8287852}
 --- !u!1 &1033941364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1590,56 +1627,15 @@ MonoBehaviour:
   - ThemeName: CITY
     RoadPrefabs:
     - {fileID: 6135008253007443742, guid: df33887b5064b624da1e27befe2cb28f, type: 3}
-    ObstaclePrefabs:
-    - {fileID: 8586222705244006480, guid: 7de8886ae0ce24341aa407c8e3ec460a, type: 3}
-    - {fileID: 3365577525225607571, guid: 097f938ab30dad44eb0996f9121199a9, type: 3}
-    - {fileID: 100000, guid: 993432d7809c9bf489a5a96006618fef, type: 3}
-    - {fileID: 100000, guid: 1af0a2c8773f85c40bdb120f32cd8a8a, type: 3}
-    - {fileID: 100000, guid: d20839e362efa3d4baa3d2ce1b4f2df4, type: 3}
-    - {fileID: 100010, guid: b3f4ad6e44f81784ba0ebe95aadf2a7d, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
-    - {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
+    ObstaclePrefabs: []
   - ThemeName: CLIFFS
     RoadPrefabs:
     - {fileID: 6135008253007443742, guid: a8194bfefadd2a24283ed10ab60a485b, type: 3}
-    ObstaclePrefabs:
-    - {fileID: 8787371299602462839, guid: c2bc4dfc97790254084bc8ac3d0abbbc, type: 3}
-    - {fileID: 5443961205063495351, guid: 16306570a08599a4693c7d331a05a6d0, type: 3}
-    - {fileID: 239334312381242284, guid: a013f797bb63a164e9b44bfee4f855ad, type: 3}
-    - {fileID: 239334312381242284, guid: d8e778f3d99a51046afcd45db15ff6dc, type: 3}
-    - {fileID: 239334312381242284, guid: d8e778f3d99a51046afcd45db15ff6dc, type: 3}
-    - {fileID: 239334312381242284, guid: d8e778f3d99a51046afcd45db15ff6dc, type: 3}
-    - {fileID: 239334312381242284, guid: d8e778f3d99a51046afcd45db15ff6dc, type: 3}
-    - {fileID: 239334312381242284, guid: d8e778f3d99a51046afcd45db15ff6dc, type: 3}
+    ObstaclePrefabs: []
   - ThemeName: FOREST
     RoadPrefabs:
     - {fileID: 6135008253007443742, guid: 46f2c0be3159c6f4b9a47bbfc1718f65, type: 3}
-    ObstaclePrefabs:
-    - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
-    - {fileID: 100000, guid: 31bbda51eeab02f44a8e92a7da2f5ff8, type: 3}
-    - {fileID: 100000, guid: 8b680e0f7699a254c84ed6737b7eb53d, type: 3}
-    - {fileID: 4003628181279848070, guid: 83b9c4e64d8300848bad6e9d524178d4, type: 3}
-    - {fileID: 4003628181279848070, guid: 83b9c4e64d8300848bad6e9d524178d4, type: 3}
-    - {fileID: 4003628181279848070, guid: 83b9c4e64d8300848bad6e9d524178d4, type: 3}
-    - {fileID: 100000, guid: 8b680e0f7699a254c84ed6737b7eb53d, type: 3}
-    - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
-    - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
-    - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
-    - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
-    - {fileID: 100000, guid: 8b680e0f7699a254c84ed6737b7eb53d, type: 3}
-    - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
-    - {fileID: 100000, guid: 2509cc5763ca17f4598bf61fd585a93e, type: 3}
+    ObstaclePrefabs: []
   m_SegmentsPerEnvironment: 20
   m_ItemPackPrefabs:
   - {fileID: 334522198554401870, guid: 03e0f9247fa9c7442b6f407c05d113fe, type: 3}
@@ -2330,6 +2326,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8214081018595497255, guid: 15d2af2f41f6c964983ee9b74a10762b, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2337,6 +2337,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8214081018595497255, guid: 15d2af2f41f6c964983ee9b74a10762b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 995888322}
+    - targetCorrespondingSourceObject: {fileID: 8214081018595497255, guid: 15d2af2f41f6c964983ee9b74a10762b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 995888323}
+    - targetCorrespondingSourceObject: {fileID: 8214081018595497255, guid: 15d2af2f41f6c964983ee9b74a10762b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 995888326}
   m_SourcePrefab: {fileID: 100100000, guid: 15d2af2f41f6c964983ee9b74a10762b, type: 3}
 --- !u!1 &1899641748
 GameObject:
