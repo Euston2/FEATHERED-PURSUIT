@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 795b6fa50c684ec40a712903c7cc6e63, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 795b6fa50c684ec40a712903c7cc6e63, type: 3}
       propertyPath: m_LocalPosition.z
@@ -94,3 +94,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plane.Gameplay.EggItem
   pickupRadius: 2.5
+  weightPenalty: 5
+  minimumSpeed: 10

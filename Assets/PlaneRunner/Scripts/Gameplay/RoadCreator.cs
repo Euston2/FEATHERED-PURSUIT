@@ -141,27 +141,44 @@ namespace Plane.Gameplay
             m_LastObstacle = packScript;
         }
 
-        // NEW: This whole method was added to handle spawning the eggs!
+        // Handles spawning the eggs in dense clusters!
         private void SpawnItem(float zPosition)
         {
             // Safety check: Don't spawn if the list is empty
             if (m_ItemPackPrefabs == null || m_ItemPackPrefabs.Length == 0) return;
 
-            // Pick a random egg
+            // Pick the egg prefab from your list
             int r = Random.Range(0, m_ItemPackPrefabs.Length);
             GameObject prefabToSpawn = m_ItemPackPrefabs[r];
 
-            // Spawn the egg floating slightly above the road (Y = 2) so it isn't buried
-            GameObject obj = Instantiate(prefabToSpawn, new Vector3(0, 2f, zPosition), Quaternion.identity);
+            // --- THE DENSITY SETTINGS ---
+            int eggsInCluster = 5; // How many eggs spawn in a row
+            float spacing = 4f;    // The distance between each egg in the line
 
-            // Auto-attach the script if you forgot it (same magic trick we used for the cars)
-            EggItem itemScript = obj.GetComponent<EggItem>();
-            if (itemScript == null)
+            // This loop spawns multiple eggs to create a dense line
+            for (int i = 0; i < eggsInCluster; i++)
             {
-                itemScript = obj.AddComponent<EggItem>();
-            }
+                // Calculate the position for this specific egg in the line
+                float currentZPosition = zPosition + (i * spacing);
+                Vector3 spawnPosition = new Vector3(0, 10f, currentZPosition); // Y=2 keeps it above ground
 
-            m_LastItem = obj;
+                // Spawn the egg
+                GameObject obj = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+
+                // Auto-attach the script if you forgot it
+                EggItem itemScript = obj.GetComponent<EggItem>();
+                if (itemScript == null)
+                {
+                    itemScript = obj.AddComponent<EggItem>();
+                }
+
+                // We only want to track the VERY LAST egg in the cluster 
+                // so the game knows when to spawn the next group!
+                if (i == eggsInCluster - 1)
+                {
+                    m_LastItem = obj;
+                }
+            }
         }
     }
 }
