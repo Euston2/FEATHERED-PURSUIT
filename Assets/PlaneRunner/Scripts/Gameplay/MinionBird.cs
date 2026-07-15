@@ -24,6 +24,8 @@ namespace Plane.Gameplay
 
         void Update()
         {
+            if (GameControl.enemiesStunned) return; // NEW: If the player stunned the birds, skip all movement logic)
+
             if (PlayerPlane.m_Main == null) return;
             Vector3 playerPos = PlayerPlane.m_Main.transform.position;
 

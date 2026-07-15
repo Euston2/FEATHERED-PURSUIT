@@ -23,22 +23,56 @@ namespace Plane.Gameplay
 
         public float m_GameSpeed = 100;
 
+        // --- 1. NEW STUN VARIABLES ---
+        public static bool enemiesStunned = false;
+        private bool isStunOnCooldown = false;
+
+        public UnityEngine.UI.Button stunUIObject;
+
         void Awake()
         {
             m_Current = this;
         }
-        // Start is called before the first frame update
+
         void Start()
         {
             m_GameState = State_Start;
-
         }
 
-        // Update is called once per frame
         void Update()
         {
             State_Timer += Time.deltaTime;
-            
+        }
+
+        // --- 2. NEW STUN LOGIC ---
+        // This is the function your UI Button will call
+        public void ActivateStun()
+        {
+            if (!isStunOnCooldown)
+            {
+                StartCoroutine(StunRoutine());
+            }
+        }
+
+        // This handles the timer so it doesn't freeze your game
+        private IEnumerator StunRoutine()
+        {
+            isStunOnCooldown = true;
+            enemiesStunned = true; // Flips the switch to freeze the birds!
+
+            // Wait for 5 seconds of stun time
+            yield return new WaitForSeconds(5f);
+
+            enemiesStunned = false; // Unfreeze the birds!
+
+            // Add a 10-second cooldown before the button works again
+            yield return new WaitForSeconds(10f);
+            isStunOnCooldown = false;
+
+            if (stunUIObject != null)
+            {
+                stunUIObject.interactable = true; // Re-enable the button after cooldown
+            }
         }
 
         public void HandleGameOver()
@@ -51,10 +85,8 @@ namespace Plane.Gameplay
         }
 
         public void HandleWin()
-        { 
+        {
 
         }
-
-
     }
 }

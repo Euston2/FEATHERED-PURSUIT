@@ -7,6 +7,9 @@ namespace Plane.Gameplay
 {
     public class PlayerPlane : MonoBehaviour
     {
+        // 1. THIS IS THE NEW VARIABLE FOR YOUR JOYSTICK
+        public Joystick movementJoystick;
+
         public Vector2 m_Angle = Vector2.zero;
         public Transform m_Base;
         Vector2 m_TurnSpeed = Vector2.zero;
@@ -27,23 +30,16 @@ namespace Plane.Gameplay
 
         void Update()
         {
-            float InputX = 0, InputY = 0;
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                InputX = -1;
-            }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                InputX = 1;
-            }
+            // 2. THIS IS THE NEW MOVEMENT LOGIC
+            // Instead of checking for keyboard arrows, we just ask the joystick which way it is being pulled!
+            float InputX = 0;
+            float InputY = 0;
 
-            if (Input.GetKey(KeyCode.UpArrow))
+            // This ensures the game doesn't crash if the joystick isn't connected yet
+            if (movementJoystick != null)
             {
-                InputY = 1;
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                InputY = -1;
+                InputX = movementJoystick.Horizontal;
+                InputY = movementJoystick.Vertical;
             }
 
             Vector3 movement = 40 * Time.deltaTime * new Vector3(InputX, InputY, 0);
@@ -61,7 +57,7 @@ namespace Plane.Gameplay
             pos.z = 0;
             transform.position = pos;
 
-            // --- THE FIX IS HERE ---
+            // --- YOUR COLLISION FIX REMAINS EXACTLY THE SAME ---
             Collider[] hits = Physics.OverlapSphere(transform.position, 2.5f);
             foreach (Collider hit in hits)
             {
@@ -81,8 +77,18 @@ namespace Plane.Gameplay
                 }
 
                 GameControl.m_Current.HandleGameOver();
+
+                //  Turn off the joystick completely 
+                if (movementJoystick != null)
+                {
+                    movementJoystick.gameObject.SetActive(false);
+                }
+
                 gameObject.SetActive(false);
                 break;
+                //GameControl.m_Current.HandleGameOver();
+                //gameObject.SetActive(false);
+                //break;
             }
         }
     }

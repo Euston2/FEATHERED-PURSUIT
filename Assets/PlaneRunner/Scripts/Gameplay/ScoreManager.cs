@@ -7,23 +7,41 @@ namespace Plane.Gameplay
     {
         public static ScoreManager instance;
 
-        
-        public TextMeshProUGUI scoreText;
-        private int currentScore = 0;
+        [SerializeField] TMP_Text scoreText;
 
-        void Awake()
+        private float score = 0f;
+        private float baseScorePerSecond = 100f;
+        private int eggMultiplier = 1;
+
+        private void Awake()
         {
-            instance = this;
-            currentScore = 0;
+            if (instance == null)
+            {
+                instance = this;
+            }
         }
 
-        public void AddScore(int points)
+        void Update()
         {
-            currentScore += points;
-
-            if (scoreText != null)
+            // --- THE FIX: Only count points if the player is alive and active on screen ---
+            if (PlayerPlane.m_Main != null && PlayerPlane.m_Main.gameObject.activeInHierarchy)
             {
-                scoreText.text = "Eggs: " + currentScore;
+                score += (baseScorePerSecond * eggMultiplier) * Time.deltaTime;
+
+                if (scoreText != null)
+                {
+                    scoreText.SetText("Score: " + Mathf.FloorToInt(score).ToString());
+                }
+            }
+        }
+
+        public void AddScore(int amount)
+        {
+            // Also prevents adding egg points if an egg is collected at the exact frame of death
+            if (PlayerPlane.m_Main != null && PlayerPlane.m_Main.gameObject.activeInHierarchy)
+            {
+                score += (2000 * amount);
+                eggMultiplier += amount;
             }
         }
     }
